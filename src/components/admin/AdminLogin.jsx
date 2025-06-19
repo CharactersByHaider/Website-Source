@@ -28,7 +28,6 @@ const AdminLogin = () => {
         toast({
           title: "Login Failed",
           description: "Invalid username or password.",
-          variant: "destructive",
           duration: 3000,
         });
       }
@@ -115,6 +114,12 @@ const AdminLogin = () => {
               {isLoading ? 'Logging in...' : 'Login'}
             </motion.button>
           </form>
+          
+          <div className="mt-6 p-4 bg-white/5 rounded-lg">
+            <p className="text-white/70 text-sm mb-2">Default credentials:</p>
+            <p className="text-white text-sm">Username: <span className="color-accent">haider1397</span></p>
+            <p className="text-white text-sm">Password: <span className="color-accent">Admin</span></p>
+          </div>
         </div>
       </motion.div>
     </div>

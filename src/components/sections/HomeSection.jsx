@@ -12,66 +12,26 @@ const HomeSection = ({ onSectionChange }) => {
   
   const [characterImageIndex, setCharacterImageIndex] = useState(0);
   const sectionRef = useRef(null);
-  const characterContainerRef = useRef(null);
 
   const mouseX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
   const mouseY = useMotionValue(typeof window !== "undefined" ? window.innerHeight / 2 : 0);
   
   useEffect(() => {
     const handleMouseMove = (event) => {
-      if (!homeSettings.characterImages || homeSettings.characterImages.length === 0 || !characterContainerRef.current) {
-        if (homeSettings.characterImages && homeSettings.characterImages.length === 1) setCharacterImageIndex(0);
-        return;
-      }
+      if (homeSettings.characterImages && homeSettings.characterImages.length > 1) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        mouseX.set(x);
+        mouseY.set(y);
 
-      const rect = characterContainerRef.current.getBoundingClientRect();
-      const x = event.clientX - rect.left; // x position within the element.
-      const y = event.clientY - rect.top;  // y position within the element.
-
-      mouseX.set(event.clientX - (sectionRef.current?.getBoundingClientRect().left || 0));
-      mouseY.set(event.clientY - (sectionRef.current?.getBoundingClientRect().top || 0));
-
-      const normalizedX = Math.max(0, Math.min(1, x / rect.width)); // 0 (left) to 1 (right)
-      const normalizedY = Math.max(0, Math.min(1, y / rect.height)); // 0 (top) to 1 (bottom)
-
-      const totalImagesConfigured = homeSettings.characterImageCount || 1;
-      const availableImages = homeSettings.characterImages.length;
-      
-      if (availableImages === 0) return;
-      if (availableImages === 1) {
+        const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2) * (180 / Math.PI) + 180;
+        const numImages = homeSettings.characterImages.length;
+        const imageIndex = Math.floor((angle / 360) * numImages) % numImages;
+        setCharacterImageIndex(imageIndex);
+      } else if (homeSettings.characterImages && homeSettings.characterImages.length === 1) {
         setCharacterImageIndex(0);
-        return;
       }
-
-      let imageIndex = 0;
-      const numHorizontalSegments = 5; // e.g., char-0 to char-5 for left/right
-      const numVerticalSegments = Math.max(1, totalImagesConfigured - (2 * numHorizontalSegments) -1) / 2; // Remaining for top/bottom
-
-      if (normalizedY < 0.33) { // Top part
-        // Moving top: higher numbers (e.g., char-11 to char-15)
-        const topRangeStart = numHorizontalSegments + 1;
-        imageIndex = topRangeStart + Math.floor(normalizedX * numVerticalSegments);
-      } else if (normalizedY > 0.66) { // Bottom part
-        // Moving bottom: highest numbers (e.g., char-16 to char-20)
-        const bottomRangeStart = numHorizontalSegments + numVerticalSegments + 1;
-        imageIndex = bottomRangeStart + Math.floor(normalizedX * numVerticalSegments);
-      } else { // Middle part (left/right dominant)
-        if (normalizedX < 0.5) { // Left side
-          // Moving left: increasing numbers (e.g., char-0 to char-5)
-          imageIndex = Math.floor(normalizedX * 2 * numHorizontalSegments); // Map 0-0.5 to 0-numHorizontalSegments
-        } else { // Right side
-          // Moving right: increasing numbers (e.g., char-0 to char-5, could be different set)
-          // For simplicity, mirroring left or using same logic.
-          imageIndex = Math.floor((normalizedX - 0.5) * 2 * numHorizontalSegments);
-        }
-      }
-      
-      // Ensure center shows image 0
-      if (normalizedX > 0.4 && normalizedX < 0.6 && normalizedY > 0.4 && normalizedY < 0.6) {
-        imageIndex = 0;
-      }
-
-      setCharacterImageIndex(Math.max(0, Math.min(imageIndex, availableImages - 1)));
     };
 
     const currentSectionRef = sectionRef.current;
@@ -84,7 +44,7 @@ const HomeSection = ({ onSectionChange }) => {
         currentSectionRef.removeEventListener('mousemove', handleMouseMove);
       }
     };
-  }, [homeSettings.characterImages, homeSettings.characterImageCount, mouseX, mouseY]);
+  }, [homeSettings.characterImages, mouseX, mouseY]);
 
   const rotateX = useTransform(mouseY, [0, typeof window !== "undefined" ? window.innerHeight : 0], [-5, 5]);
   const rotateY = useTransform(mouseX, [0, typeof window !== "undefined" ? window.innerWidth : 0], [5, -5]);
@@ -146,7 +106,6 @@ const HomeSection = ({ onSectionChange }) => {
         </motion.div>
 
         <motion.div 
-          ref={characterContainerRef}
           className="md:w-1/2 relative flex justify-center items-center"
           style={{ perspective: "1000px" }}
         >
@@ -169,7 +128,7 @@ const HomeSection = ({ onSectionChange }) => {
               src={currentCharacterImage}
               alt="Muhammad Haider 3D Character"
               className="max-h-[70vh] md:max-h-[80vh] object-contain drop-shadow-2xl"
-            />
+             src="https://images.unsplash.com/photo-1635003913011-95971abba560" />
           </motion.div>
         </motion.div>
       </motion.div>
