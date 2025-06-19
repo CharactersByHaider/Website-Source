@@ -13,7 +13,7 @@ const SiteAssetsManager = () => {
   const { toast } = useToast();
   const { currentPalette } = useColors();
 
-  const [homePageAssets, setHomePageAssets] = useState(settings.homePage || { characterImages: [], redStripImage: '', backgroundImage: '' });
+  const [homePageAssets, setHomePageAssets] = useState(settings.homePage || { characterImages: [], redStripImage: '', backgroundImage: '', characterImageCount: 21 });
   const [sectionBackgrounds, setSectionBackgrounds] = useState(settings.sectionBackgrounds || { home: {}, projects: {}, experience: {}, contact: {} });
 
   const fileInputRefs = useRef({
@@ -62,7 +62,10 @@ const SiteAssetsManager = () => {
           updatedImages[index] = value;
         }
         setHomePageAssets(prev => ({ ...prev, characterImages: updatedImages }));
-      } else {
+      } else if (key === 'characterImageCount') {
+        setHomePageAssets(prev => ({ ...prev, [key]: parseInt(value, 10) || 1 }));
+      }
+       else {
         setHomePageAssets(prev => ({ ...prev, [key]: value }));
       }
     }
@@ -145,6 +148,18 @@ const SiteAssetsManager = () => {
           )}
           
           <div>
+            <label className="block text-sm mb-1">Number of Character Images for 3D Effect</label>
+            <input 
+              type="number" 
+              value={homePageAssets.characterImageCount || 21} 
+              onChange={(e) => handleHomePageAssetChange('characterImageCount', e.target.value)}
+              className="w-full md:w-1/3 input-admin mb-2"
+              min="1"
+            />
+            <p className="text-xs mt-1 mb-2 opacity-60">Total images in your sequence (e.g., 21 for char-0 to char-20).</p>
+          </div>
+
+          <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-sm">Character Images (for 3D hover effect)</label>
               <button onClick={addCharacterImageField} className="btn-secondary text-xs px-2 py-1 rounded">Add Image</button>
@@ -164,7 +179,7 @@ const SiteAssetsManager = () => {
               </div>
             )})}
             {homePageAssets.characterImages.length === 0 && <p className="text-xs opacity-70">Add at least one image for the character display.</p>}
-             <p className="text-xs mt-1 opacity-60">For 3D effect: Provide multiple images from different angles. If one image, it will be static.</p>
+             <p className="text-xs mt-1 opacity-60">Upload images in sequence (e.g., char-0.png, char-1.png, ...). The 'Number of Character Images' above should match the count of images you intend to use for the effect.</p>
           </div>
         </div>
       </div>
