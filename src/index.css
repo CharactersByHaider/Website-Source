@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #FF0000; /* Red */
+  --color-secondary: #008000; /* Green */
+  --color-high-value: #808080; /* Gray */
+  --color-low-value: #FFFFFF; /* White */
+  --color-accent: #008000; /* Green, as secondary is often used as accent */
+
+  --bg-low-value: var(--color-low-value);
+  --text-high-value: var(--color-high-value);
+  --text-primary: var(--color-primary);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: var(--bg-low-value);
+  color: var(--text-high-value);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+.text-color-primary {
+  color: var(--text-primary);
+}
+.bg-color-primary {
+  background-color: var(--color-primary);
+}
+.border-color-primary {
+  border-color: var(--color-primary);
+}
+
+.color-secondary {
+  color: var(--color-secondary);
+}
+.bg-color-secondary {
+  background-color: var(--color-secondary);
+}
+.border-color-secondary {
+  border-color: var(--color-secondary);
+}
+
+.color-accent {
+  color: var(--color-accent);
+}
+.bg-color-accent {
+  background-color: var(--color-accent);
+}
+.border-color-accent {
+  border-color: var(--color-accent);
+}
+
+.color-high-value {
+  color: var(--text-high-value);
+}
+.bg-color-high-value {
+  background-color: var(--text-high-value);
+}
+
+.color-low-value {
+  color: var(--bg-low-value);
+}
+.bg-color-low-value {
+  background-color: var(--bg-low-value);
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+}
+
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background-color: rgba(var(--color-primary-rgb, 255, 0, 0), 0.1); /* Red with transparency */
+  border: 1px solid rgba(var(--color-primary-rgb, 255, 0, 0), 0.2);
+}
+
+.section-bg-pattern {
+  /* Placeholder for slight variations in tone and pattern */
+  /* This can be customized per section or via admin panel */
+  background-color: var(--bg-low-value); /* Default */
+}
+
+.text-shadow {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(var(--color-primary-rgb, 255, 0, 0), 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure button text is readable */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-low-value); /* White text on red button */
+}
+.btn-primary:hover {
+  filter: brightness(110%);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-low-value); /* White text on green button */
+}
+.btn-secondary:hover {
+  filter: brightness(110%);
+}
+
+.text-high-value {
+  color: var(--text-high-value);
+}
+
+.text-low-value {
+  color: var(--bg-low-value);
+}
+
+.bg-high-value {
+  background-color: var(--text-high-value);
+}
+
+.bg-low-value {
+  background-color: var(--bg-low-value);
+}
+
+/* Ensure links are styled correctly */
+a {
+  color: var(--text-primary);
+}
+a:hover {
+  color: var(--color-secondary);
+}
