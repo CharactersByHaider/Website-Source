@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash2, Save, X, UploadCloud } from 'lucide-react';

@@ -13,6 +13,7 @@ export const useSiteSettings = () => {
 const initialSettings = {
   homePage: {
     characterImages: [],
+    characterImageCount: 21, // Default to 21 images (0-20)
     redStripImage: '',
     backgroundImage: '',
   },
@@ -38,7 +39,20 @@ export const SiteSettingsProvider = ({ children }) => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('siteSettings');
       try {
-        return saved ? JSON.parse(saved) : initialSettings;
+        const parsed = saved ? JSON.parse(saved) : initialSettings;
+        // Ensure homePage settings exist
+        if (!parsed.homePage) {
+          parsed.homePage = { ...initialSettings.homePage };
+        } else {
+          // Ensure characterImageCount has a default if missing
+          if (typeof parsed.homePage.characterImageCount === 'undefined') {
+            parsed.homePage.characterImageCount = initialSettings.homePage.characterImageCount;
+          }
+          if (!Array.isArray(parsed.homePage.characterImages)) {
+             parsed.homePage.characterImages = [];
+          }
+        }
+        return parsed;
       } catch (error) {
         console.error("Error parsing siteSettings from localStorage:", error);
         return initialSettings;
